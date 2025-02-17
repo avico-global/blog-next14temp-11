@@ -1,28 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Container from "../../common/Container";
 import Link from "next/link";
 import Fullcontainer from "../../common/Fullcontainer";
 import { MenuIcon, Search } from "lucide-react";
-import { useEffect } from "react";
 import MobileSidebar from "../navbar/MobileSidebar";
+import { sanitizeUrl } from "@/components/lib/myFun";
+import Logo from "./Logo";
 
-export default function Navbar() {
-  const data = [
-    {
-      name: "Food",
-      link: "/food",
-    },
-    {
-      name: "Fashion",
-      link: "/fashion",
-    },
-    {
-      name: "Travel",
-      link: "/travel",
-    },
-  ];
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+export default function Navbar({ 
+  staticPages,
+  categories,
+  logo,
+  imagePath,
+  filteredBlogs,
+  isActive,
+  searchContainerRef,
+  handleSearchToggle,
+  handleSearchChange,
+  searchQuery,
+  openSearch 
+}) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -49,43 +46,93 @@ export default function Navbar() {
       >
         <Container className="py-4">
           <div className="flex justify-between items-center">
-            {/* Menu Icon */}
             <div>
               <button 
                 onClick={() => setIsSidebarOpen(true)}
-                className="hover:bg-gray-100 p-2 rounded-full transition-colors lg:hidden "
+                className="hover:bg-gray-100 p-2 rounded-full transition-colors lg:hidden"
               >
                 <MenuIcon />
               </button>
-              <Link href="/" className="text-2xl font-bold capitalize hidden lg:block ">maag</Link>
+                
+                <Logo logo={logo} imagePath={imagePath} />
+
             </div>
 
             {/* Desktop Navigation */}
             <div className="gap-6 items-center hidden lg:flex">
-              <Link href="/" className={li}>
-                Home
-              </Link>
+              {staticPages?.map((item, index) => (
+                <Link 
+                  href={item.href} 
+                  className={li} 
+                  key={index}
+                  title={item.page}
+                >
+                  {item.page}
+                </Link>
+              ))}
               <div className="flex items-center gap-4">
-                {data.map((item, index) => (
-                  <Link href={item.link} className={li} key={index}>
-                    {item.name}
+                {categories?.map((item, index) => (
+                  <Link 
+                    href={`/${sanitizeUrl(item.title)}`} 
+                    className={li} 
+                    key={index}
+                    title={item.title}
+                  >
+                    {item.title}
                   </Link>
                 ))}
               </div>
             </div>
 
-            {/* Search Icon */}
-            <div>
-              <Search />
+            {/* Search Section */}
+            <div className="relative" ref={searchContainerRef}>
+              <Search 
+                className="cursor-pointer"
+                onClick={handleSearchToggle}
+              />
+              
+              {openSearch && (
+                <div className="fixed lg:absolute top-16 right-0 w-full lg:w-[650px]">
+                  <input
+                    type="text"
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="w-full p-2 border rounded-md shadow-xl"
+                    placeholder="Search..."
+                    autoFocus
+                  />
+                  
+                  {searchQuery && (
+                    <div className="absolute w-full bg-white shadow-2xl rounded-md mt-1">
+                      {filteredBlogs?.length > 0 ? (
+                        filteredBlogs.map((item, index) => (
+                          <Link
+                            key={index}
+                            href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(item.title)}`}
+                            title={item.title}
+                          >
+                            <div className="p-2 hover:bg-gray-200 border-b">
+                              {item.title}
+                            </div>
+                          </Link>
+                        ))
+                      ) : (
+                        <div className="p-2">No articles found.</div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         </Container>
       </Fullcontainer>
 
-      {/* Mobile Sidebar */}
       <MobileSidebar 
         isOpen={isSidebarOpen} 
-        onClose={() => setIsSidebarOpen(false)} 
+        onClose={() => setIsSidebarOpen(false)}
+        staticPages={staticPages}
+        categories={categories}
       />
     </>
   );

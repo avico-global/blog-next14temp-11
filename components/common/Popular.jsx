@@ -3,22 +3,13 @@ import Container from "../common/Container";
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import image1 from "@/public/images/codesupply1.webp";
-import image2 from "@/public/images/codesupply2.webp";
-import image3 from "@/public/images/codesupply3.1.webp";
-import image4 from "@/public/images/codesupply4.webp";
+import dayjs from "dayjs";
+import { sanitizeUrl } from "../lib/myFun";
 
-const highlights = [
-  { id: 1, title: "Boost Your Fitness Journey", image: image1, category: "Travel", date: "Apr 13, 2023", comments: 3 },
-  { id: 2, title: "Cultivating a Strong Community", image: image2, category: "Travel", date: "Apr 23, 2023", comments: 3 },
-  { id: 3, title: "Strategies for Dealing with Stress", image: image3, category: "Selfcare", date: "Jun 17, 2023", comments: 3 },
-  { id: 4, title: "Sustainable Living Solutions", image: image4, category: "Style", date: "Apr 25, 2023", comments: 5 },
-  { id: 5, title: "Fitness Home Workout Routines", image: image1, category: "Travel", date: "Apr 13, 2023", comments: 3 },
-];
-
-export default function Popular() {
+export default function Popular({ articles, imagePath }) {
+  const highlights = articles?.filter((item) => item.isPopular);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const maxIndex = highlights.length - 4; // Adjust based on visible items
+  const maxIndex = highlights?.length - 4; // Adjust based on visible items
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex >= maxIndex ? maxIndex : prevIndex + 1));
@@ -28,10 +19,12 @@ export default function Popular() {
     setCurrentIndex((prevIndex) => (prevIndex <= 0 ? 0 : prevIndex - 1));
   };
 
+  if (!highlights?.length) return null;
+
   return (
     <Container className="pb-10 border-t-[2px] mt-16 border-black relative">
       <div className="pt-5 pb-7 text-md font-light flex items-center gap-2">
-        <h3>Latest</h3>
+        <h3>Popular</h3>
         <ChevronRight className="w-5 h-5" />
       </div>
 
@@ -92,12 +85,16 @@ export default function Popular() {
           >
             {highlights.map((post) => (
               <div key={post.id} className="w-[60%] sm:w-[50%] md:w-[33.33%] lg:w-[25%] flex-shrink-0 px-2">
-                <Link href="/">
+                <Link 
+                  href={`/${sanitizeUrl(post.article_category)}/${sanitizeUrl(post.title)}`}
+                  title={post.title}
+                >
                   <article className="group cursor-pointer relative overflow-hidden">
                     <div className="relative aspect-[3/4] rounded-[4px] overflow-hidden">
                       <Image
-                        src={post.image}
-                        alt={post.title}
+                        src={`${imagePath}/${post.image}`}
+                        alt={post.altImage || post.tagline || "No Thumbnail Found"}
+                        title={post.altImage || post.tagline || post.title}
                         fill
                         className="object-cover transition-all duration-500 group-hover:scale-105"
                       />
@@ -109,11 +106,11 @@ export default function Popular() {
                         <div className="items-center border-t pt-4 border-white/50 text-xs text-white">
                           <div className="px-4 flex items-center gap-2">
                             <span className="bg-white text-black px-4 py-1 rounded-[4px]">
-                              {post.category}
+                              {post.article_category}
                             </span>
-                            <span>{post.date}</span>
+                            <span>{dayjs(post.published_at).format("MMM D, YYYY")}</span>
                             <span>•</span>
-                            <span>{post.comments}</span>
+                            <span>{post.author}</span>
                           </div>
                         </div>
                       </div>

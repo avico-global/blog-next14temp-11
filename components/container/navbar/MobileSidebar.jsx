@@ -1,27 +1,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { X } from 'lucide-react';
+import { sanitizeUrl } from "@/components/lib/myFun";
 
-export default function MobileSidebar({ isOpen, onClose }) {
-  const menuItems = [
-    {
-      name: "Home",
-      link: "/",
-    },
-    {
-      name: "Food",
-      link: "/food",
-    },
-    {
-      name: "Fashion",
-      link: "/fashion",
-    },
-    {
-      name: "Travel",
-      link: "/travel",
-    },
-  ];
-
+export default function MobileSidebar({ isOpen, onClose, staticPages, categories }) {
   return (
     <>
       {/* Sidebar */}
@@ -35,6 +17,7 @@ export default function MobileSidebar({ isOpen, onClose }) {
           <button 
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full"
+            title="Close Menu"
           >
             <X className="w-6 h-6" />
           </button>
@@ -42,14 +25,30 @@ export default function MobileSidebar({ isOpen, onClose }) {
           {/* Navigation Links */}
           <nav className="mt-8">
             <ul className="space-y-4">
-              {menuItems.map((item, index) => (
-                <li key={index}>
+              {/* Static Pages */}
+              {staticPages?.map((item, index) => (
+                <li key={`static-${index}`}>
                   <Link 
-                    href={item.link}
+                    href={item.href}
                     className="block py-2 text-lg hover:text-gray-600 transition-colors"
                     onClick={onClose}
+                    title={item.page}
                   >
-                    {item.name}
+                    {item.page}
+                  </Link>
+                </li>
+              ))}
+              
+              {/* Categories */}
+              {categories?.map((item, index) => (
+                <li key={`category-${index}`}>
+                  <Link 
+                    href={`/${sanitizeUrl(item.title)}`}
+                    className="block py-2 text-lg hover:text-gray-600 transition-colors"
+                    onClick={onClose}
+                    title={item.title}
+                  >
+                    {item.title}
                   </Link>
                 </li>
               ))}
@@ -63,6 +62,7 @@ export default function MobileSidebar({ isOpen, onClose }) {
         <div 
           className="fixed inset-0 bg-black/50 z-40"
           onClick={onClose}
+          title="Close Menu Overlay"
         />
       )}
     </>

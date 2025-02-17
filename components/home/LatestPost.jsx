@@ -1,139 +1,73 @@
 import React from "react";
+import Image from "next/image";
+import Link from "next/link";
 import Container from "../common/Container";
-import Blogs from "./Section";
 import Rightbar from "../common/Rightbar";
-import image2 from "@/public/images/codesupply2.webp";
-import image3 from "@/public/images/codesupply3.1.webp";
-import image1 from "@/public/images/codesupply1.webp";
-import image4 from "@/public/images/codesupply4.webp";
 import { ChevronRight } from "lucide-react";
+import { sanitizeUrl } from "../lib/myFun";
 
-export default function LatestPost() {
-  const data = [
-    {
-      title: "Cultivating a Garden of Wellness and Tranquility",
-      description:
-        "Insights into daily wellness and effective home decor strategies are shared to enhance everyday living and create nurturing spaces.",
-      image: image1,
-      date: "May 13, 2023",
-      author: "Elliot Alderson",
-      category: "Style",
-      link: "/trending",
-    },
-    {
-      title: "Thriving in Urban Environments: Tips for City Living",
-      description:
-        "In the Age of Information, news media faces both unprecedented opportunities and significant challenges.",
-      image: image2,
-      date: "Jul 10, 2023",
-      author: "Elliot Alderson",
-      category: "Selfcare",
-      link: "/trending",
-    },
-    {
-      title: "Trending3",
-      description: "Trending blogs",
-      image: image3,
-      date: "2024-01-01",
-      author: "John Doe",
-      link: "/trending",
-    },
-    {
-      title: "Trending4",
-      description: "Trending blogs",
-      image: image4,
-      date: "2024-01-01",
-      author: "John Doe",
-      link: "/trending",
-    },
-    {
-      title: "Cultivating a Garden of Wellness and Tranquility",
-      description:
-        "Insights into daily wellness and effective home decor strategies are shared to enhance everyday living and create nurturing spaces.",
-      image: image1,
-      date: "May 13, 2023",
-      author: "Elliot Alderson",
-      category: "Style",
-      link: "/trending",
-    },
-    {
-      title: "Thriving in Urban Environments: Tips for City Living",
-      description:
-        "In the Age of Information, news media faces both unprecedented opportunities and significant challenges.",
-      image: image2,
-      date: "Jul 10, 2023",
-      author: "Elliot Alderson",
-      category: "Selfcare",
-      link: "/trending",
-    },
-    {
-      title: "Trending3",
-      description: "Trending blogs",
-      image: image3,
-      date: "2024-01-01",
-      author: "John Doe",
-      link: "/trending",
-    },
-  ];
-  const rightbarPosts = [
-    {
-      id: 1,
-      title:
-        "Nurturing   Your Creative Side for a More Fulfilling Daily Routine",
-      category: "Selfcare",
-      date: "Aug 22, 2023",
-      image: image1,
-    },
-    {
-      id: 2,
-      title: "Elevating Everyday Moments with Simple Yet Profound Changes",
-      category: "Style",
-      date: "Aug 19, 2023",
-      image: image2,
-    },
-    {
-      id: 3,
-      title: "Balancing Modern Technology, Traditional Living Practice",
-      category: "Travel",
-      date: "Aug 12, 2023",
-      image: image3,
-    },
-    {
-      id: 4,
-      title: "Nurturing Your Creative Side for a More Fulfilling Daily Routine",
-      category: "Selfcare",
-      date: "Aug 22, 2023",
-      image: image1,
-    },
-    {
-      id: 5,
-      title: "Elevating Everyday Moments with Simple Yet Profound Changes",
-      category: "Style",
-      date: "Aug 19, 2023",
-      image: image2,
-    },
-    {
-      id: 6,
-      title: "Balancing Modern Technology, Traditional Living Practice",
-      category: "Travel",
-      date: "Aug 12, 2023",
-      image: image3,
-    },
-  ];
+export default function LatestPost({ blog_list = [], imagePath, about_me }) {
+  // Remove the filter to show all blogs
+  const allPosts = blog_list.slice(0, 8);
 
   return (
     <Container className="border-t-[2px] mt-16 border-black">
-      <div className="pt-5 pb-7 text-md font-light flex items-center  gap-2">
-        <h3> Latest</h3>
+      <div className="pt-5 pb-7 text-md font-light flex items-center gap-2">
+        <h3>Most Popular</h3>
         <ChevronRight className="w-5 h-5" />
       </div>
-      <div className="flex flex-col gap-10 lg:gap-4 lg:flex-row   ">
+      <div className="flex flex-col gap-10 lg:gap-4 lg:flex-row">
         <div className="lg:w-[75%]">
-          <Blogs posts={data} />
+          <div className="space-y-5">
+            {allPosts.map((blog, index) => (
+              <Link 
+                href={`/blog/${sanitizeUrl(blog.title)}`} 
+                key={blog.id || index}
+                title={`Read more about ${blog.title}`}
+              >
+                <article className="cursor-pointer">
+                  <div className="flex flex-col sm:flex-row gap-5">
+                    <div className="relative w-full sm:w-[50%] aspect-[5.3/3] flex-shrink-0 rounded-lg overflow-hidden">
+                      <Image
+                        src={`${imagePath}/${blog.image || "no-image.png"}`}
+                        alt={blog.altImage || blog.title}
+                        title={blog.altImage || blog.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="flex-1 flex flex-col justify-between space-y-3">
+                      <div>
+                        <h2 className="text-xl font-bold leading-snug hover:text-gray-600 transition-colors">
+                          {blog.title}
+                        </h2>
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                          {blog.tagline}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm border-t pt-3 border-gray-300">
+                        <span className="text-gray-600">{blog.published_at}</span>
+                        <span className="text-gray-300">•</span>
+                        <span className="text-gray-600">by {blog.author}</span>
+                      </div>
+                    </div>
+                  </div>
+                  {index !== allPosts.length - 1 && (
+                    <div className="border-b border-gray-300 mt-5"></div>
+                  )}
+                </article>
+              </Link>
+            ))}
+          </div>
         </div>
 
         <div className="lg:w-[25%] border-l border-gray-300 pl-3">
-          <Rightbar/>
+          <Rightbar 
+          about_me={about_me}
+          blog_list={blog_list}
+          imagePath={imagePath}
+
+          />
         </div>
       </div>
     </Container>

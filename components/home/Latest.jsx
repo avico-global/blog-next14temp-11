@@ -1,98 +1,132 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "../common/Container";
-import Section from "./Section";
 import Image from "next/image";
-import image2 from "@/public/images/codesupply2.webp";
-import image3 from "@/public/images/codesupply3.1.webp";
-import image1 from "@/public/images/codesupply1.webp";
-import image4 from "@/public/images/codesupply4.webp";
+
 import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import Button from "../common/Button";
+import { sanitizeUrl } from "../lib/myFun";
 
-const data = [
-  {
-    title: "Cultivating a Garden of Wellness and Tranquility",
-    description:
-      "Insights into daily wellness and effective home decor strategies are shared to enhance everyday living and create nurturing spaces.",
-    image: image1,
-    date: "May 13, 2023",
-    author: "Elliot Alderson",
-    category: "Style",
-    link: "/trending",
-  },
-  {
-    title: "Thriving in Urban Environments: Tips for City ",
-    description:
-      "In the Age of Information, news media faces both unprecedented opportunities and significant challenges.",
-    image: image2,
-    date: "Jul 10, 2023",
-    author: "Elliot Alderson",
-    category: "Selfcare",
-    link: "/trending",
-  },
-  {
-    title: "Trending Tips for City Living",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad modi tenetur impedit architecto qui. Quis quisquam, expedita in cupiditate doloremque et autem suscipit illum nostrum sapiente porro numquam dolore excepturi.",
-    image: image3,
-    date: "2024-01-01",
-    author: "John Doe",
-    link: "/trending",
-  },
-  {
-    title: "Trending Tips for City Living",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ad modi tenetur impedit architecto qui. Quis quisquam, expedita in cupiditate doloremque et autem suscipit illum nostrum sapiente porro numquam dolore excepturi.",
-    image: image4,
-    date: "2024-01-01",
-    author: "John Doe",
-    link: "/trending",
-  },
-];
+export default function Latest({ blogs, imagePath }) {
+  const [visibleBlogs, setVisibleBlogs] = useState(6);
+  const displayedBlogs = blogs?.slice(0, visibleBlogs);
 
-export default function Trending() {
-  const trendingPost = data[0];
-  const blogPosts = data.slice(1);
+  const handleSeeMore = () => {
+    setVisibleBlogs((prevVisibleBlogs) => prevVisibleBlogs + 6);
+  };
 
   return (
-    <Container className=" border-t-[2px] mt-16 border-black">
-      <div className="pt-5 pb-7 text-md font-light flex items-center  gap-2">
-        <h3> Latest</h3>
+    <Container className="border-t-[2px] mt-16 border-black">
+      <div className="pt-5 pb-7 text-md font-light flex items-center gap-2">
+        <h3>Latest</h3>
         <ChevronRight className="w-5 h-5" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {/* Trending Post - Left Side */}
-        <div className="border-r border-gray-300">
-          <article className="group cursor-pointer pr-3">
+        {displayedBlogs?.[0] && (
+          <div className="border-r border-gray-300">
+            <BlogCard
+              blog={displayedBlogs[0]}
+              imagePath={imagePath}
+              isFeature={true}
+            />
+          </div>
+        )}
+
+        {/* Blog Posts - Right Side */}
+        {displayedBlogs?.length > 1 && (
+          <div className="space-y-5">
+            {displayedBlogs.slice(1, 4).map((blog, index) => (
+              <React.Fragment key={index}>
+                <BlogCard blog={blog} imagePath={imagePath} isFeature={false} />
+                {index !== displayedBlogs.slice(1).length - 1 && (
+                  <div className="border-b border-gray-300"></div>
+                )}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {visibleBlogs < blogs?.length && (
+        <Button onClick={handleSeeMore} className="mt-10 mx-auto block">
+          See More Articles
+        </Button>
+      )}
+    </Container>
+  );
+}
+
+function BlogCard({ blog, imagePath, isFeature }) {
+  return (
+    <article className="group cursor-pointer">
+      <Link
+        href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(
+          blog.title
+        )}`}
+        title={blog.title}
+      >
+        {isFeature ? (
+          // Feature card layout
+          <>
             <div className="relative h-[400px] rounded-[4px] overflow-hidden mb-6">
               <Image
-                src={trendingPost.image}
-                alt={trendingPost.title}
+                src={
+                  blog.image ? `${imagePath}/${blog.image}` : "/no-image.png"
+                }
+                alt={blog.altImage || blog.tagline || "Featured Post"}
+                title={blog.altImage || blog.tagline || "Featured Post"}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"
               />
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 pr-3">
               <div className="flex items-center gap-3 text-sm">
-                <span className="text-gray-600">{trendingPost.category}</span>
+                <span className="text-gray-600">{blog.article_category}</span>
                 <span className="text-gray-300">•</span>
-                <span className="text-gray-600">{trendingPost.date}</span>
+                <span className="text-gray-600">{blog.published_at}</span>
                 <span className="text-gray-300">•</span>
-                <span className="text-gray-600">by {trendingPost.author}</span>
+                <span className="text-gray-600">by {blog.author}</span>
               </div>
               <h1 className="text-2xl font-bold leading-snug hover:text-gray-600 transition-colors">
-                {trendingPost.title}
+                {blog.title}
               </h1>
-              <p className="text-gray-600 leading-relaxed">
-                {trendingPost.description}
-              </p>
+              <p className="text-gray-600 leading-relaxed">{blog.tagline}</p>
             </div>
-          </article>
-        </div>
-
-        {/* Blog Posts - Right Side */}
-        {blogPosts.length > 0 && <Section posts={blogPosts} />}
-      </div>
-    </Container>
+          </>
+        ) : (
+          // Regular card layout
+          <div className="flex flex-col sm:flex-row gap-5">
+            <div className="relative w-full sm:w-[50%] aspect-[5.3/3] flex-shrink-0 rounded-lg overflow-hidden">
+              <Image
+                src={
+                  blog.image ? `${imagePath}/${blog.image}` : "/no-image.png"
+                }
+                alt={blog.altImage || blog.tagline || "Blog Post"}
+                title={blog.altImage || blog.tagline || "Blog Post"}
+                fill
+                className="object-cover group-hover:scale-105 transition-transform duration-300"
+              />
+            </div>
+            <div className="flex-1 flex flex-col justify-between space-y-3">
+              <div>
+                <h2 className="text-xl font-bold leading-snug hover:text-gray-600 transition-colors">
+                  {blog.title}
+                </h2>
+                <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                  {blog.tagline}
+                </p>
+              </div>
+              <div className="flex items-center gap-3 text-sm border-t pt-3 border-gray-300">
+                <span className="text-gray-600">{blog.published_at}</span>
+                <span className="text-gray-300">•</span>
+                <span className="text-gray-600">by {blog.author}</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </Link>
+    </article>
   );
 }
