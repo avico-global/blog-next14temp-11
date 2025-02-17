@@ -2,7 +2,6 @@ import React from "react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Navbar from "@/components/container/navbar/Navbar.jsx";
-import Header from "@/components/categories/Header.jsx";
 import Rightbar from "@/components/common/Rightbar";
 import Container from "@/components/common/Container";
 import Footer from "@/components/container/footer/Footer";
