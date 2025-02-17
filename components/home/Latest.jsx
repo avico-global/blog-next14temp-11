@@ -89,9 +89,9 @@ function BlogCard({ blog, imagePath, isFeature }) {
                 <span className="text-gray-300">•</span>
                 <span className="text-gray-600">by {blog.author}</span>
               </div>
-              <h1 className="text-2xl font-bold leading-snug hover:text-gray-600 transition-colors">
+              <h2 className="text-2xl font-bold leading-snug hover:text-gray-600 transition-colors">
                 {blog.title}
-              </h1>
+              </h2>
               <p className="text-gray-600 leading-relaxed">{blog.tagline}</p>
             </div>
           </>

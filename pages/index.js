@@ -75,7 +75,7 @@ export default function Home({
         />
       </Head>
 
-      <Navbar logo={logo} imagePath={imagePath} categories={categories} />
+      <Navbar logo={logo} imagePath={imagePath} categories={categories}  blog_list={blog_list} />
 
       <Hero
         image={`${imagePath}/${banner?.file_name}`}
@@ -171,18 +171,11 @@ export async function getServerSideProps({ req }) {
   const favicon = await callBackendApi({ domain, type: "favicon" });
   const blog_list = await callBackendApi({ domain, type: "blog_list" });
   const categories = await callBackendApi({ domain, type: "categories" });
-  const contact_details = await callBackendApi({
-    domain,
-    type: "contact_details",
-  });
+
   const project_id = logo?.data[0]?.project_id || null;
   const about_me = await callBackendApi({ domain, type: "about_me" });
   const copyright = await callBackendApi({ domain, type: "copyright" });
   const banner = await callBackendApi({ domain, type: "banner" });
-  const tag_list = await callBackendApi({ domain, type: "tag_list" });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
-  const footer_type = await callBackendApi({ domain, type: "footer_type" });
-  const all_data = await callBackendApi({ domain, type: "" });
   const imagePath = await getImagePath(project_id, domain);
 
   let page = null;
@@ -206,14 +199,9 @@ export async function getServerSideProps({ req }) {
       logo: logo?.data[0] || null,
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
-      copyright: copyright?.data[0].value || null,
+      copyright: copyright?.data[0]?.value || null,
       about_me: about_me?.data[0] || null,
       banner: banner?.data[0] || null,
-      contact_details: contact_details?.data[0]?.value || null,
-      nav_type: nav_type?.data[0]?.value || {},
-      footer_type: footer_type?.data[0]?.value || {},
-      tag_list: tag_list?.data[0]?.value || null,
-      all_data,
       page,
     },
   };

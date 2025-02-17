@@ -3,14 +3,20 @@ import Container from "../common/Container";
 import Image from "next/image";
 
 export default function Hero({ image, data }) {
+  console.log('Font sizes:', {
+    titleSize: data.titleFontSize,
+    taglineSize: data.taglineFontSize
+  });
+
   return (
     <Container className="relative py-4 px-0 pt-24">
       <div className="relative h-[80vh] sm:h-[550px] sm:rounded-[4px] overflow-hidden">
+
         <Image
           src={image}
           alt={data.altImage || data.tagline || "No Banner Found"}
           title={data.imageTitle || data.title || "Banner"}
-          className="object-cover"
+          className="object-cover "
           fill
           priority
           sizes="(max-width: 320px) 320px,
@@ -38,7 +44,9 @@ export default function Hero({ image, data }) {
           <h1
             className="font-bold mb-4 max-w-3xl"
             style={{
-              fontSize: `${data.titleFontSize || 76}px`,
+              fontSize: data.titleFontSize?.includes('px') 
+                ? data.titleFontSize 
+                : `${data.titleFontSize || 48}px`,
               color: data.textColor || "white",
             }}
           >
@@ -48,7 +56,9 @@ export default function Hero({ image, data }) {
             <p
               className="mb-6 max-w-xl"
               style={{
-                fontSize: `${data.taglineFontSize || 24}px`,
+                fontSize: data.taglineFontSize?.includes('px') 
+                  ? data.taglineFontSize 
+                  : `${data.taglineFontSize || 18}px`,
                 color: data.textColor
                   ? `${data.textColor}90`
                   : "rgba(255,255,255,0.9)",

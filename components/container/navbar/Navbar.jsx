@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Container from "../../common/Container";
 import Link from "next/link";
 import Fullcontainer from "../../common/Fullcontainer";
@@ -12,17 +12,16 @@ export default function Navbar({
   categories,
   logo,
   imagePath,
-  filteredBlogs,
-  isActive,
-  searchContainerRef,
-  handleSearchToggle,
-  handleSearchChange,
-  searchQuery,
-  openSearch 
+  blog_list,
+  searchContainerRef
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [openSearch, setOpenSearch] = useState(false);
+  const [filteredBlogs, setFilteredBlogs] = useState([]);
+  const searchRef = useRef(null);
 
   const li = "text-black text-lg relative after:absolute after:bottom-0 after:right-0 after:h-[2px] after:w-0 after:bg-black after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full";
 
@@ -36,6 +35,42 @@ export default function Navbar({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setOpenSearch(false);
+        setSearchQuery('');
+        setFilteredBlogs([]);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleSearchToggle = () => {
+    setOpenSearch(!openSearch);
+    setSearchQuery('');
+    setFilteredBlogs([]);
+  };
+
+  const handleSearchChange = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    
+    if (query.trim() === '') {
+      setFilteredBlogs([]);
+      return;
+    }
+
+    const filtered = blog_list?.filter((blog) =>
+      blog.title.toLowerCase().includes(query.toLowerCase())
+    ) || [];
+    setFilteredBlogs(filtered);
+  };
 
   return (
     <>
@@ -85,43 +120,46 @@ export default function Navbar({
             </div>
 
             {/* Search Section */}
-            <div className="relative" ref={searchContainerRef}>
+            <div className="flex items-center justify-end gap-3 text-gray-500 relative" ref={searchRef}>
               <Search 
                 className="cursor-pointer"
                 onClick={handleSearchToggle}
               />
               
               {openSearch && (
-                <div className="fixed lg:absolute top-16 right-0 w-full lg:w-[650px]">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    className="w-full p-2 border rounded-md shadow-xl"
-                    placeholder="Search..."
-                    autoFocus
-                  />
-                  
-                  {searchQuery && (
-                    <div className="absolute w-full bg-white shadow-2xl rounded-md mt-1">
-                      {filteredBlogs?.length > 0 ? (
-                        filteredBlogs.map((item, index) => (
-                          <Link
-                            key={index}
-                            href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(item.title)}`}
-                            title={item.title}
-                          >
-                            <div className="p-2 hover:bg-gray-200 border-b">
-                              {item.title}
-                            </div>
-                          </Link>
-                        ))
-                      ) : (
-                        <div className="p-2">No articles found.</div>
-                      )}
-                    </div>
-                  )}
-                </div>
+                <>
+                  <div className="fixed lg:absolute top-16 lg:right-0 lg:ml-auto w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0">
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={handleSearchChange}
+                      className="lg:text-xl border  border-gray-300 inputField rounded-md outline-none bg-white shadow-xl p-2 px-3 mx-auto transition-opacity duration-300 ease-in-out opacity-100 w-5/6 lg:w-[650px] focus:ring-2 focus:ring-yellow-500"
+                      placeholder="Search..."
+                      autoFocus
+                    />
+                    {searchQuery && (
+                      <div className="lg:absolute top-full p-1 lg:p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto w-5/6 lg:w-[650px]">
+                        {filteredBlogs?.length > 0 ? (
+                          filteredBlogs.map((item, index) => (
+                            <Link
+                              key={index}
+                              title={item.title}
+                              href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(item?.title)}`}
+                            >
+                              <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
+                                {item.title}
+                              </div>
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="p-2 text-gray-600">
+                            No articles found.
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </div>

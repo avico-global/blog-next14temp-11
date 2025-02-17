@@ -100,9 +100,11 @@ export default function index({
 
       <Navbar logo={logo} imagePath={imagePath} categories={categories} />
       <Breadcrumbs className=" pt-28 " breadcrumbs={breadcrumbs} />
+
       <Container className="flex flex-col gap-10 lg:gap-4 lg:flex-row">
         <div className="lg:w-[75%]">
           <Container>
+           <h1 className=" text-black text-4xl font-bold uppercase " >{category}</h1>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {filteredBlogList.map((article, index) => (
                 <div key={index} className="flex flex-col pt-10">
