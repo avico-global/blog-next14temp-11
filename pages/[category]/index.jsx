@@ -30,7 +30,7 @@ export default function index({
   meta,
   domain,
   favicon,
-  page,
+  copyright,
 }) {
   const router = useRouter();
   const { category } = router.query;
@@ -177,6 +177,7 @@ export default function index({
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
+        copyright={copyright}
       />
 
       <JsonLd
@@ -279,9 +280,7 @@ export async function getServerSideProps({ req, query }) {
     type: "copyright",
   });
   const blog_list = await callBackendApi({ domain, type: "blog_list" });
-  const tag_list = await callBackendApi({ domain, type: "tag_list" });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
-  const footer_type = await callBackendApi({ domain, type: "footer_type" });
+ 
 
   let project_id = logo?.data[0]?.project_id || null;
   let imagePath = await getImagePath(project_id, domain);
@@ -313,14 +312,9 @@ export async function getServerSideProps({ req, query }) {
       banner: banner?.data[0] || null,
       blog_list: blog_list?.data[0].value || null,
       categories: categories?.data[0]?.value || null,
-      footer_text: footer_text?.data[0]?.value || null,
       copyright: copyright?.data[0]?.value || null,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
       about_me: about_me?.data[0] || null,
-      contact_details: contact_details?.data[0]?.value || null,
-      tag_list: tag_list?.data[0]?.value || null,
-      nav_type: nav_type?.data[0]?.value || {},
-      footer_type: footer_type?.data[0]?.value || {},
       page,
     },
   };

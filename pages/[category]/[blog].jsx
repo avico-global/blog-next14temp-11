@@ -31,6 +31,7 @@ export default function blogs({
   domain,
   favicon,
   project_id,
+  copyright,
 }) {
   const router = useRouter();
   const { category, blog } = router.query;
@@ -76,7 +77,6 @@ export default function blogs({
       </Head>
 
       <Navbar
-        category={category}
         logo={logo}
         imagePath={imagePath}
         categories={categories}
@@ -149,9 +149,9 @@ export default function blogs({
       <Footer
         categories={categories}
         imagePath={imagePath}
-        category={category}
         logo={logo}
         about_me={about_me}
+        copyright={copyright}
       />
 
       <JsonLd
@@ -237,17 +237,11 @@ export async function getServerSideProps({ req, query }) {
   }
 
   const myblog = await callBackendApi({ domain, type: isValidBlog?.key });
-  const tag_list = await callBackendApi({ domain, type: "tag_list" });
   const logo = await callBackendApi({ domain, type: "logo" });
   const favicon = await callBackendApi({ domain, type: "favicon" });
   const about_me = await callBackendApi({ domain, type: "about_me" });
-  const contact_details = await callBackendApi({
-    domain,
-    type: "contact_details",
-  });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
-  const blog_type = await callBackendApi({ domain, type: "blog_type" });
-  const footer_type = await callBackendApi({ domain, type: "footer_type" });
+ 
+
 
   let page = null;
   if (Array.isArray(layoutPages?.data) && layoutPages.data.length > 0) {
@@ -271,14 +265,9 @@ export async function getServerSideProps({ req, query }) {
       logo: logo?.data[0] || null,
       myblog: myblog?.data[0] || {},
       blog_list: blog_list?.data[0]?.value || null,
-      tag_list: tag_list?.data[0]?.value || null,
       categories: categories?.data[0]?.value || null,
       about_me: about_me?.data[0] || null,
-      contact_details: contact_details?.data[0]?.value  || null,
       favicon: favicon?.data[0]?.file_name || null,
-      nav_type: nav_type?.data[0]?.value || {},
-      blog_type: blog_type?.data[0]?.value || {},
-      footer_type: footer_type?.data[0]?.value || {},
       project_id,
       page,
     },

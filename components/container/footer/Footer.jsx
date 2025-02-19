@@ -12,6 +12,7 @@ export default function Footer({
   category,
   logo,
   about_me,
+  copyright
 }) {
   const md = new MarkdownIt();
 
@@ -19,7 +20,6 @@ export default function Footer({
     { name: "Home", href: "/" },
     { name: "Terms & Conditions", href: "/terms-and-conditions" },
     { name: "Privacy Policy", href: "/privacy-policy" },
-    { name: "Sitemap", href: "/sitemap.xml", isCustomLink: true },
   ];
   const content = md.render(about_me.value || "");
 
@@ -107,7 +107,7 @@ export default function Footer({
 
             {/* Copyright */}
             <div className="pt-8 text-gray-600">
-              <p>© {new Date().getFullYear()} MAAG. All rights reserved.</p>
+              <p>{copyright?.value || '© All rights reserved'}</p>
             </div>
           </div>
         </div>

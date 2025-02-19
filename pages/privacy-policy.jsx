@@ -32,9 +32,9 @@ export default function PriavcyPolicy({
   policy,
   logo,
   meta,
-  page,
   domain,
   about_me,
+copyright,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt.render(policy || "");
@@ -110,6 +110,7 @@ export default function PriavcyPolicy({
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
+        copyright={copyright}
       />
 
       <JsonLd
@@ -150,14 +151,8 @@ export async function getServerSideProps({ req }) {
     domain,
     type: "categories",
   });
-  const contact_details = await callBackendApi({
-    domain,
-    type: "contact_details",
-  });
-  const terms = await callBackendApi({ domain, type: "terms" });
+ 
   const policy = await callBackendApi({ domain, type: "policy" });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
-  const footer_type = await callBackendApi({ domain, type: "footer_type" });
   const about_me = await callBackendApi({
     domain,
     type: "about_me",
@@ -188,11 +183,7 @@ export async function getServerSideProps({ req }) {
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
-      contact_details: contact_details?.data[0]?.value || null,
-      terms: terms?.data[0]?.value || "",
       policy: policy?.data[0]?.value || "",
-      nav_type: nav_type?.data[0]?.value || {},
-      footer_type: footer_type?.data[0]?.value || {},
       about_me: about_me?.data[0] || null,
       page,
     },

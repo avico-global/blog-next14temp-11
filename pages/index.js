@@ -37,6 +37,7 @@ export default function Home({
   categories,
   banner,
   favicon,
+  copyright,
 }) {
   return (
     <div>
@@ -95,6 +96,7 @@ export default function Home({
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
+        copyright={copyright}
       />
 
       <JsonLd

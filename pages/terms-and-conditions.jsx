@@ -32,6 +32,7 @@ export default function Terms({
   terms,
   categories,
   about_me,
+  copyright
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(terms || "");
@@ -107,6 +108,7 @@ export default function Terms({
         about_me={about_me}
         imagePath={imagePath}
         categories={categories}
+        copyright={copyright}
       />
 
       <JsonLd
@@ -157,14 +159,9 @@ export async function getServerSideProps({ req }) {
     domain,
     type: "categories",
   });
-  const contact_details = await callBackendApi({
-    domain,
-    type: "contact_details",
-  });
+ 
   const terms = await callBackendApi({ domain, type: "terms" });
   const layout = await callBackendApi({ domain, type: "layout" });
-  const nav_type = await callBackendApi({ domain, type: "nav_type" });
-  const footer_type = await callBackendApi({ domain, type: "footer_type" });
   const about_me = await callBackendApi({
     domain,
     type: "about_me",
@@ -196,10 +193,7 @@ export async function getServerSideProps({ req }) {
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
       meta: meta?.data[0]?.value || null,
-      contact_details: contact_details?.data[0]?.value || null,
       terms: terms?.data[0]?.value || "",
-      nav_type: nav_type?.data[0]?.value || {},
-      footer_type: footer_type?.data[0]?.value || {},
       page,
       about_me: about_me?.data[0] || null,
     },
