@@ -30,7 +30,6 @@ export default function index({
   meta,
   domain,
   favicon,
-  copyright,
 }) {
   const router = useRouter();
   const { category } = router.query;
@@ -43,7 +42,6 @@ export default function index({
 
   if (!client) return <div>Loading...</div>;
 
-  // Filter blog list based on category
   const filteredBlogList = blog_list.filter((item) => {
     const searchContent = sanitizeUrl(category);
     return sanitizeUrl(item.article_category) === searchContent;
@@ -98,7 +96,7 @@ export default function index({
         />
       </Head>
 
-      <Navbar logo={logo} imagePath={imagePath} categories={categories} />
+      <Navbar logo={logo} imagePath={imagePath} categories={categories} blog_list={blog_list} />
       <Breadcrumbs className=" pt-28 " breadcrumbs={breadcrumbs} />
 
       <Container className="flex flex-col gap-10 lg:gap-4 lg:flex-row">
@@ -177,7 +175,6 @@ export default function index({
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
-        copyright={copyright}
       />
 
       <JsonLd
@@ -270,15 +267,8 @@ export async function getServerSideProps({ req, query }) {
   const logo = await callBackendApi({ domain, type: "logo" });
   const favicon = await callBackendApi({ domain, type: "favicon" });
   const banner = await callBackendApi({ domain, type: "banner" });
-  const footer_text = await callBackendApi({ domain, type: "footer_text" });
-  const contact_details = await callBackendApi({
-    domain,
-    type: "contact_details",
-  });
-  const copyright = await callBackendApi({
-    domain,
-    type: "copyright",
-  });
+  
+  
   const blog_list = await callBackendApi({ domain, type: "blog_list" });
  
 
@@ -312,7 +302,6 @@ export async function getServerSideProps({ req, query }) {
       banner: banner?.data[0] || null,
       blog_list: blog_list?.data[0].value || null,
       categories: categories?.data[0]?.value || null,
-      copyright: copyright?.data[0]?.value || null,
       domain: domain === "hellospace.us" ? req?.headers?.host : domain,
       about_me: about_me?.data[0] || null,
       page,

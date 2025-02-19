@@ -1,6 +1,4 @@
 import React, { useEffect } from "react";
-
-// Components
 import Container from "@/components/common/Container";
 import Navbar from "@/components/container/navbar/Navbar";
 import Footer from "@/components/container/footer/Footer";
@@ -32,7 +30,7 @@ export default function Terms({
   terms,
   categories,
   about_me,
-  copyright
+  blog_list,
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt?.render(terms || "");
@@ -89,7 +87,7 @@ export default function Terms({
         />
       </Head>
 
-      <Navbar logo={logo} imagePath={imagePath} categories={categories} />
+      <Navbar blog_list={blog_list} logo={logo} imagePath={imagePath} categories={categories} />
       <Container>
         <Breadcrumbs className=" pt-28 " breadcrumbs={breadcrumbs} />
       </Container>
@@ -108,7 +106,6 @@ export default function Terms({
         about_me={about_me}
         imagePath={imagePath}
         categories={categories}
-        copyright={copyright}
       />
 
       <JsonLd

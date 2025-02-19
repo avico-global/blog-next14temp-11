@@ -42,19 +42,19 @@ const Logo = ({ logo, imagePath }) => {
 
   const dynamicLogoHeight =
     windowWidth < 768
-      ? 30
+      ? 25
       : windowWidth < 1200
-      ? Math.floor(logoHeight / 2)
-      : logoHeight;
+      ? Math.floor(logoHeight / 2.5)
+      : Math.floor(logoHeight / 1.2);
 
   const dynamicLogoWidth =
     windowWidth >= 1200
-      ? logoWidth
+      ? Math.floor(logoWidth / 1.2)
       : Math.floor((logoWidth / logoHeight) * dynamicLogoHeight);
 
   const logoStyle = {
     height: `${dynamicLogoHeight}px`,
-    width: windowWidth >= 1200 ? `${logoWidth}px` : "auto",
+    width: windowWidth >= 1200 ? `${Math.floor(logoWidth / 1.2)}px` : "auto",
     maxWidth: "100%",
   };
 

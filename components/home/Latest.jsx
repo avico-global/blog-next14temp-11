@@ -78,7 +78,7 @@ function BlogCard({ blog, imagePath, isFeature }) {
                 alt={blog.altImage || blog.tagline || "Featured Post"}
                 title={blog.altImage || blog.tagline || "Featured Post"}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                className="object-cover transform transition-all duration-500 ease-in-out group-hover:scale-110"
               />
             </div>
             <div className="space-y-3 pr-3">
@@ -89,10 +89,12 @@ function BlogCard({ blog, imagePath, isFeature }) {
                 <span className="text-gray-300">•</span>
                 <span className="text-gray-600">by {blog.author}</span>
               </div>
-              <h2 className="text-2xl font-bold leading-snug hover:text-gray-600 transition-colors">
+              <h2 className="text-2xl font-bold leading-snug transition-all duration-300 group-hover:text-primary group-hover:translate-x-1">
                 {blog.title}
               </h2>
-              <p className="text-gray-600 leading-relaxed">{blog.tagline}</p>
+              <p className="text-gray-600 leading-relaxed transition-all duration-300 group-hover:translate-x-1">
+                {blog.tagline}
+              </p>
             </div>
           </>
         ) : (
@@ -106,15 +108,15 @@ function BlogCard({ blog, imagePath, isFeature }) {
                 alt={blog.altImage || blog.tagline || "Blog Post"}
                 title={blog.altImage || blog.tagline || "Blog Post"}
                 fill
-                className="object-cover group-hover:scale-105 transition-transform duration-300"
+                className="object-cover transform transition-all duration-500 ease-in-out group-hover:scale-110"
               />
             </div>
             <div className="flex-1 flex flex-col justify-between space-y-3">
               <div>
-                <h2 className="text-xl font-bold leading-snug hover:text-gray-600 transition-colors">
+                <h2 className="text-xl font-bold leading-snug transition-all duration-300 group-hover:text-primary group-hover:translate-x-1">
                   {blog.title}
                 </h2>
-                <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 transition-all duration-300 group-hover:translate-x-1">
                   {blog.tagline}
                 </p>
               </div>

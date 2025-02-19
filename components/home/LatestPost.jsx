@@ -20,12 +20,12 @@ export default function LatestPost({ blog_list = [], imagePath, about_me }) {
         <div className="lg:w-[75%]">
           <div className="space-y-5">
             {allPosts.map((blog, index) => (
-              <Link 
-                href={`/blog/${sanitizeUrl(blog.title)}`} 
+              <Link
+                href={`/blog/${sanitizeUrl(blog.title)}`}
                 key={blog.id || index}
                 title={`Read more about ${blog.title}`}
               >
-                <article className="cursor-pointer">
+                <article className="cursor-pointer group">
                   <div className="flex flex-col sm:flex-row gap-5">
                     <div className="relative w-full sm:w-[50%] aspect-[5.3/3] flex-shrink-0 rounded-lg overflow-hidden">
                       <Image
@@ -33,20 +33,22 @@ export default function LatestPost({ blog_list = [], imagePath, about_me }) {
                         alt={blog.altImage || blog.title}
                         title={blog.altImage || blog.title}
                         fill
-                        className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        className="object-cover transition-transform duration-300 group-hover:scale-110"
                       />
                     </div>
-                    <div className="flex-1 flex flex-col justify-between space-y-3">
+                    <div className="flex-1 flex flex-col justify-between space-y-3 p-4 ">
                       <div>
-                        <h2 className="text-xl font-bold leading-snug hover:text-gray-600 transition-colors">
+                        <h2 className="text-xl font-bold leading-snug transition-colors duration-300 group-hover:text-gray-600">
                           {blog.title}
                         </h2>
-                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2">
+                        <p className="text-gray-600 text-sm leading-relaxed line-clamp-2 transition-colors duration-300 group-hover:text-gray-900">
                           {blog.tagline}
                         </p>
                       </div>
                       <div className="flex items-center gap-3 text-sm border-t pt-3 border-gray-300">
-                        <span className="text-gray-600">{blog.published_at}</span>
+                        <span className="text-gray-600">
+                          {blog.published_at}
+                        </span>
                         <span className="text-gray-300">•</span>
                         <span className="text-gray-600">by {blog.author}</span>
                       </div>
@@ -62,11 +64,10 @@ export default function LatestPost({ blog_list = [], imagePath, about_me }) {
         </div>
 
         <div className="lg:w-[25%] border-l border-gray-300 pl-3">
-          <Rightbar 
-          about_me={about_me}
-          blog_list={blog_list}
-          imagePath={imagePath}
-
+          <Rightbar
+            about_me={about_me}
+            blog_list={blog_list}
+            imagePath={imagePath}
           />
         </div>
       </div>

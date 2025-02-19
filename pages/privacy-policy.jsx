@@ -3,8 +3,6 @@ import Breadcrumbs from "@/components/categories/Breadcrumbs";
 import useBreadcrumbs from "@/components/lib/useBreadcrumbs";
 import JsonLd from "@/json/JsonLd";
 import { useRouter } from "next/router";
-
-// Components
 import Container from "@/components/common/Container";
 import Fullcontainer from "@/components/common/Fullcontainer";
 import Navbar from "@/components/container/navbar/Navbar";
@@ -18,8 +16,6 @@ import {
 } from "@/components/lib/myFun";
 
 import Head from "next/head";
-
-// Font
 import { Raleway } from "next/font/google";
 const myFont = Raleway({
   subsets: ["cyrillic", "cyrillic-ext", "latin", "latin-ext"],
@@ -34,7 +30,7 @@ export default function PriavcyPolicy({
   meta,
   domain,
   about_me,
-copyright,
+blog_list
 }) {
   const markdownIt = new MarkdownIt();
   const content = markdownIt.render(policy || "");
@@ -88,7 +84,7 @@ copyright,
         />
       </Head>
 
-      <Navbar logo={logo} imagePath={imagePath} categories={categories} />
+      <Navbar logo={logo} imagePath={imagePath} categories={categories} blog_list={blog_list} />
 
       <Fullcontainer>
         <Container>
@@ -110,7 +106,6 @@ copyright,
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
-        copyright={copyright}
       />
 
       <JsonLd

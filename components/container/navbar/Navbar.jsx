@@ -6,6 +6,7 @@ import { MenuIcon, Search } from "lucide-react";
 import MobileSidebar from "../navbar/MobileSidebar";
 import { sanitizeUrl } from "@/components/lib/myFun";
 import Logo from "./Logo";
+import Image from "next/image";
 
 export default function Navbar({ 
   staticPages,
@@ -23,6 +24,9 @@ export default function Navbar({
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const searchRef = useRef(null);
 
+  // Add trending blogs state
+  const trendingBlogs = blog_list?.slice(8, 12) || [];
+
   const li = "text-black text-lg relative after:absolute after:bottom-0 after:right-0 after:h-[2px] after:w-0 after:bg-black after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full";
 
   useEffect(() => {
@@ -38,7 +42,12 @@ export default function Navbar({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
+      // Check if click is outside the search container AND not on the search input
+      if (
+        searchRef.current && 
+        !searchRef.current.contains(event.target) && 
+        !event.target.closest('input[type="text"]')
+      ) {
         setOpenSearch(false);
         setSearchQuery('');
         setFilteredBlogs([]);
@@ -105,7 +114,7 @@ export default function Navbar({
                   {item.page}
                 </Link>
               ))}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center capitalize gap-4">
                 {categories?.map((item, index) => (
                   <Link 
                     href={`/${sanitizeUrl(item.title)}`} 
@@ -125,46 +134,83 @@ export default function Navbar({
                 className="cursor-pointer"
                 onClick={handleSearchToggle}
               />
-              
-              {openSearch && (
-                <>
-                  <div className="fixed lg:absolute top-16 lg:right-0 lg:ml-auto w-full lg:w-fit flex flex-col items-start justify-center lg:justify-end left-0">
-                    <input
-                      type="text"
-                      value={searchQuery}
-                      onChange={handleSearchChange}
-                      className="lg:text-xl border  border-gray-300 inputField rounded-md outline-none bg-white shadow-xl p-2 px-3 mx-auto transition-opacity duration-300 ease-in-out opacity-100 w-5/6 lg:w-[650px] focus:ring-2 focus:ring-yellow-500"
-                      placeholder="Search..."
-                      autoFocus
-                    />
-                    {searchQuery && (
-                      <div className="lg:absolute top-full p-1 lg:p-3 right-0 bg-white shadow-2xl rounded-md mt-1 z-10 mx-auto w-5/6 lg:w-[650px]">
-                        {filteredBlogs?.length > 0 ? (
-                          filteredBlogs.map((item, index) => (
-                            <Link
-                              key={index}
-                              title={item.title}
-                              href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(item?.title)}`}
-                            >
-                              <div className="p-2 hover:bg-gray-200 border-b text-gray-600">
-                                {item.title}
-                              </div>
-                            </Link>
-                          ))
-                        ) : (
-                          <div className="p-2 text-gray-600">
-                            No articles found.
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
             </div>
           </div>
         </Container>
       </Fullcontainer>
+
+      {/* New Search Overlay */}
+      {openSearch && (
+        <div className="fixed top-[72px] left-0 w-full bg-white shadow-lg z-40">
+          <Container className="py-8">
+            <h2 className="text-2xl font-bold mb-6">What are You Looking For?</h2>
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={handleSearchChange}
+              className="w-full text-xl border border-gray-300 rounded-md outline-none bg-white p-4 mb-6  focus:ring-gray-500"
+              placeholder="Search..."
+              autoFocus
+            />
+
+            {searchQuery ? (
+              // Search Results
+              <div className="border-t pt-6">
+                {filteredBlogs?.length > 0 ? (
+                  <div className="space-y-4">
+                    {filteredBlogs.map((item, index) => (
+                      <Link
+                        key={index}
+                        href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(item?.title)}`}
+                        title={item.title}
+                      >
+                        <div className="p-3 hover:bg-gray-100 rounded-md transition-colors">
+                          <h3 className="font-medium">{item.title}</h3>
+                          <p className="text-sm text-gray-600 mt-1">{item.tagline}</p>
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center text-gray-600 py-8">
+                    No articles found.
+                  </div>
+                )}
+              </div>
+            ) : (
+              // Trending Section
+              <div className="border-t pt-6">
+                <h3 className="text-xl font-semibold mb-6">Trending now</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {trendingBlogs.map((blog, index) => (
+                    <Link
+                      key={index}
+                      href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(blog.title)}`}
+                      className="group"
+                    >
+                      <div className="relative aspect-[16/9] mb-3 rounded-lg overflow-hidden">
+                        <Image
+                          src={blog.image ? `${imagePath}/${blog.image}` : "/no-image.png"}
+                          alt={blog.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                        />
+                      </div>
+                      <h4 className="font-bold group-hover:text-gray-600 transition-colors mb-3">
+                        {blog.title}
+                      </h4>
+                      <div className="flex items-center justify-between text-sm text-gray-600 border-t pt-3 border-gray-300">
+                        <span>by {blog.author}</span>
+                        <span>{blog.published_at}</span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </Container>
+        </div>
+      )}
 
       <MobileSidebar 
         isOpen={isSidebarOpen} 

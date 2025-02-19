@@ -76,7 +76,12 @@ export default function Home({
         />
       </Head>
 
-      <Navbar logo={logo} imagePath={imagePath} categories={categories}  blog_list={blog_list} />
+      <Navbar
+        logo={logo}
+        imagePath={imagePath}
+        categories={categories}
+        blog_list={blog_list}
+      />
 
       <Hero
         image={`${imagePath}/${banner?.file_name}`}
@@ -96,7 +101,6 @@ export default function Home({
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
-        copyright={copyright}
       />
 
       <JsonLd
@@ -176,7 +180,6 @@ export async function getServerSideProps({ req }) {
 
   const project_id = logo?.data[0]?.project_id || null;
   const about_me = await callBackendApi({ domain, type: "about_me" });
-  const copyright = await callBackendApi({ domain, type: "copyright" });
   const banner = await callBackendApi({ domain, type: "banner" });
   const imagePath = await getImagePath(project_id, domain);
 
@@ -201,7 +204,6 @@ export async function getServerSideProps({ req }) {
       logo: logo?.data[0] || null,
       blog_list: blog_list?.data[0]?.value || [],
       categories: categories?.data[0]?.value || null,
-      copyright: copyright?.data[0]?.value || null,
       about_me: about_me?.data[0] || null,
       banner: banner?.data[0] || null,
       page,

@@ -12,7 +12,6 @@ export default function Footer({
   category,
   logo,
   about_me,
-  copyright
 }) {
   const md = new MarkdownIt();
 
@@ -38,38 +37,15 @@ export default function Footer({
               }}
             />
 
-            {/* Social Links */}
-            <div className="flex gap-4 pt-4">
-              <a
-                href="/"
-                className="text-gray-600 hover:text-black transition-colors"
-                title="Follow us on Facebook"
-              >
-                <Facebook size={20} />
-              </a>
-              <a
-                href="/"
-                className="text-gray-600 hover:text-black transition-colors"
-                title="Follow us on Instagram"
-              >
-                <Instagram size={20} />
-              </a>
-              <a
-                href="/"
-                className="text-gray-600 hover:text-black transition-colors"
-                title="Follow us on Twitter"
-              >
-                <Twitter size={20} />
-              </a>
-            </div>
+          
           </div>
 
           {/* Links Sections */}
-          <div className="col-span-2 border-l px-8 space-y-8">
+          <div className="flex  justify-between  border-l px-8 ">
             {/* Categories Section */}
             <div className="space-y-4">
               <h3 className="font-bold text-lg">Categories</h3>
-              <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <ul className="flex flex-col gap-x-6 gap-y-3">
                 {categories?.map((item, index) => (
                   <li key={index}>
                     <a
@@ -90,7 +66,7 @@ export default function Footer({
             {/* Quick Links Section */}
             <div className="space-y-4">
               <h3 className="font-bold text-lg">Quick Links</h3>
-              <ul className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <ul className="flex flex-col gap-x-6 gap-y-3">
                 {quickLinks.map((link) => (
                   <li key={link.name}>
                     <a
@@ -105,10 +81,7 @@ export default function Footer({
               </ul>
             </div>
 
-            {/* Copyright */}
-            <div className="pt-8 text-gray-600">
-              <p>{copyright?.value || '© All rights reserved'}</p>
-            </div>
+           
           </div>
         </div>
       </Container>

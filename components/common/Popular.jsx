@@ -12,7 +12,9 @@ export default function Popular({ articles, imagePath }) {
   const maxIndex = highlights?.length - 4; // Adjust based on visible items
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex >= maxIndex ? maxIndex : prevIndex + 1));
+    setCurrentIndex((prevIndex) =>
+      prevIndex >= maxIndex ? maxIndex : prevIndex + 1
+    );
   };
 
   const prevSlide = () => {
@@ -36,7 +38,9 @@ export default function Popular({ articles, imagePath }) {
             onClick={prevSlide}
             disabled={currentIndex === 0}
             className={`p-2 rounded-full transition-colors ${
-              currentIndex === 0 ? "text-gray-300 cursor-not-allowed" : "hover:bg-gray-100"
+              currentIndex === 0
+                ? "text-gray-300 cursor-not-allowed"
+                : "hover:bg-gray-100"
             }`}
           >
             <ChevronLeft className="w-4 h-4" />
@@ -45,7 +49,9 @@ export default function Popular({ articles, imagePath }) {
             onClick={nextSlide}
             disabled={currentIndex >= maxIndex}
             className={`p-2 rounded-full transition-colors ${
-              currentIndex >= maxIndex ? "text-gray-300 cursor-not-allowed" : "hover:bg-gray-100"
+              currentIndex >= maxIndex
+                ? "text-gray-300 cursor-not-allowed"
+                : "hover:bg-gray-100"
             }`}
           >
             <ChevronRight className="w-4 h-4" />
@@ -61,7 +67,9 @@ export default function Popular({ articles, imagePath }) {
             onClick={prevSlide}
             disabled={currentIndex === 0}
             className={`p-2 bg-black/50 text-white rounded-full ${
-              currentIndex === 0 ? "opacity-30 cursor-not-allowed" : "hover:bg-black/70"
+              currentIndex === 0
+                ? "opacity-30 cursor-not-allowed"
+                : "hover:bg-black/70"
             }`}
           >
             <ChevronLeft className="w-5 h-5" />
@@ -70,7 +78,9 @@ export default function Popular({ articles, imagePath }) {
             onClick={nextSlide}
             disabled={currentIndex >= maxIndex}
             className={`p-2 bg-black/50 text-white rounded-full ${
-              currentIndex >= maxIndex ? "opacity-30 cursor-not-allowed" : "hover:bg-black/70"
+              currentIndex >= maxIndex
+                ? "opacity-30 cursor-not-allowed"
+                : "hover:bg-black/70"
             }`}
           >
             <ChevronRight className="w-5 h-5" />
@@ -84,34 +94,40 @@ export default function Popular({ articles, imagePath }) {
             style={{ transform: `translateX(-${currentIndex * 100}%)` }}
           >
             {highlights.map((post, index) => (
-              <div 
+              <div
                 key={post.id || `post-${index}`}
                 className="w-[60%] sm:w-[50%] md:w-[33.33%] lg:w-[25%] flex-shrink-0 px-2"
               >
-                <Link 
-                  href={`/${sanitizeUrl(post.article_category)}/${sanitizeUrl(post.title)}`}
+                <Link
+                  href={`/${sanitizeUrl(post.article_category)}/${sanitizeUrl(
+                    post.title
+                  )}`}
                   title={post.title}
                 >
                   <article className="group cursor-pointer relative overflow-hidden">
                     <div className="relative aspect-[3/4] rounded-[4px] overflow-hidden">
                       <Image
                         src={`${imagePath}/${post.image}`}
-                        alt={post.altImage || post.tagline || "No Thumbnail Found"}
+                        alt={
+                          post.altImage || post.tagline || "No Thumbnail Found"
+                        }
                         title={post.altImage || post.tagline || post.title}
                         fill
-                        className="object-cover transition-all duration-500 group-hover:scale-105"
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-110"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-b from-black/50 to-transparent transition-opacity duration-500 group-hover:opacity-75" />
                       <div className="absolute inset-0 py-4 flex flex-col justify-between">
-                        <h3 className="px-4 text-white font-medium text-lg leading-tight group-hover:text-gray-200 transition-colors">
+                        <h3 className="px-4 text-white font-medium text-lg leading-tight transition-all duration-500 group-hover:text-gray-100 group-hover:translate-y-1">
                           {post.title}
                         </h3>
-                        <div className="items-center border-t pt-4 border-white/50 text-xs text-white">
+                        <div className="items-center border-t pt-4 border-white/50 text-xs text-white transition-transform duration-500 group-hover:translate-y-[-4px]">
                           <div className="px-4 flex items-center gap-2">
                             <span className="bg-white text-black px-4 py-1 rounded-[4px]">
                               {post.article_category}
                             </span>
-                            <span>{dayjs(post.published_at).format("MMM D, YYYY")}</span>
+                            <span>
+                              {dayjs(post.published_at).format("MMM D, YYYY")}
+                            </span>
                             <span>•</span>
                             <span>{post.author}</span>
                           </div>

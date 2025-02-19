@@ -31,7 +31,6 @@ export default function blogs({
   domain,
   favicon,
   project_id,
-  copyright,
 }) {
   const router = useRouter();
   const { category, blog } = router.query;
@@ -80,6 +79,7 @@ export default function blogs({
         logo={logo}
         imagePath={imagePath}
         categories={categories}
+        blog_list={blog_list}
       />
 
       <Container className=" pt-48  border-b border-gray-200 pb-6 ">
@@ -130,9 +130,10 @@ export default function blogs({
         </div>
       </Container>
       <Container>
+
         <div className="flex flex-col gap-10 lg:gap-4 lg:flex-row py-20">
-          <div className="  lg:w-[75%] lg:px-32">
-            <article className="prose lg:prose-xl max-w-full">
+          <div className="  lg:w-[75%] ">
+            <article className="prose lg:prose-xl ">
               <div dangerouslySetInnerHTML={{ __html: content }} />
             </article>
           </div>
@@ -145,13 +146,13 @@ export default function blogs({
           </div>
         </div>
       </Container>
+
       <Popular articles={blog_list} imagePath={imagePath} />
       <Footer
         categories={categories}
         imagePath={imagePath}
         logo={logo}
         about_me={about_me}
-        copyright={copyright}
       />
 
       <JsonLd
