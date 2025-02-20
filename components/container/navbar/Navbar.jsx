@@ -25,7 +25,7 @@ export default function Navbar({
   const searchRef = useRef(null);
 
   // Add trending blogs state
-  const trendingBlogs = blog_list?.slice(8, 12) || [];
+  const trendingBlogs = blog_list?.slice(2, 6) || [];
 
   const li = "text-black text-lg relative after:absolute after:bottom-0 after:right-0 after:h-[2px] after:w-0 after:bg-black after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full";
 
