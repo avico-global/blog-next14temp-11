@@ -62,7 +62,7 @@ function BlogCard({ blog, imagePath, isFeature }) {
   return (
     <article className="group cursor-pointer">
       <Link
-        href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(
+        href={`/${sanitizeUrl(
           blog.title
         )}`}
         title={blog.title}

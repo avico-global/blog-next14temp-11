@@ -52,9 +52,7 @@ export default function Feature({ blog_list, imagePath }) {
           <div className="absolute inset-0 pt-5 text-white flex flex-col justify-between items-start text-center">
             <div className="px-4 flex-1 flex flex-col lg:max-w-[50%] text-left min-w-0">
               <Link
-                href={`/${encodeURI(
-                  sanitizeUrl(featuredPost.article_category)
-                )}/${encodeURI(sanitizeUrl(featuredPost.title))}`}
+                href={`/${encodeURI(sanitizeUrl(featuredPost.title))}`}
                 className="font-medium leading-9 transition-all duration-500 ease-out line-clamp-2 text-4xl group-hover:translate-y-1"
                 title={featuredPost.title}
               >
@@ -110,9 +108,7 @@ const Bottomtext = ({ posts, imagePath }) => {
 
               <div className="flex-1 flex flex-col justify-between min-w-0">
                 <Link
-                  href={`/${encodeURI(
-                    sanitizeUrl(post.article_category)
-                  )}/${encodeURI(sanitizeUrl(post.title))}`}
+                  href={`/${encodeURI(sanitizeUrl(post.title))}`}
                   className="font-medium leading-snug transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:text-gray-200"
                 >
                   {post.title}

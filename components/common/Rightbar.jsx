@@ -17,9 +17,7 @@ export default function Rightbar({ about_me = {}, blog_list = [], imagePath }) {
         {lastFiveBlogs.map((post, index) => (
           <div key={index}>
             <Link
-              href={`/${encodeURI(
-                sanitizeUrl(post.article_category)
-              )}/${encodeURI(sanitizeUrl(post.title))}`}
+              href={`/${encodeURI(sanitizeUrl(post.title))}`}
               title={post.title || "Article"}
             >
               <article className="flex gap-5 pb-5 border-b border-gray-300 group cursor-pointer">

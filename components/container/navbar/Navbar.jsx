@@ -117,7 +117,7 @@ export default function Navbar({
               <div className="flex items-center capitalize gap-4">
                 {categories?.map((item, index) => (
                   <Link 
-                    href={`/${sanitizeUrl(item.title)}`} 
+                    href={`/category/${sanitizeUrl(item.title)}`} 
                     className={li} 
                     key={index}
                     title={item.title}
@@ -161,7 +161,7 @@ export default function Navbar({
                     {filteredBlogs.map((item, index) => (
                       <Link
                         key={index}
-                        href={`/${sanitizeUrl(item.article_category)}/${sanitizeUrl(item?.title)}`}
+                        href={`/${sanitizeUrl(item?.title)}`}
                         title={item.title}
                       >
                         <div className="p-3 hover:bg-gray-100 rounded-md transition-colors">
@@ -185,7 +185,7 @@ export default function Navbar({
                   {trendingBlogs.map((blog, index) => (
                     <Link
                       key={index}
-                      href={`/${sanitizeUrl(blog.article_category)}/${sanitizeUrl(blog.title)}`}
+                      href={`/${sanitizeUrl(blog.title)}`}
                       className="group"
                     >
                       <div className="relative aspect-[16/9] mb-3 rounded-lg overflow-hidden">

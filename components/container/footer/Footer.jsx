@@ -36,7 +36,6 @@ export default function Footer({
                 __html: `${content.slice(21, 200)}...`,
               }}
             />
-
           
           </div>
 
@@ -49,7 +48,7 @@ export default function Footer({
                 {categories?.map((item, index) => (
                   <li key={index}>
                     <a
-                      href={`/${sanitizeUrl(item.title)}`}
+                      href={`/category/${sanitizeUrl(item.title)}`}
                       title={item?.title || "Article Link"}
                       className={cn(
                         "text-gray-600 hover:text-black transition-colors",

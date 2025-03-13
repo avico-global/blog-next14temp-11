@@ -99,7 +99,7 @@ export default function Popular({ articles, imagePath }) {
                 className="w-[60%] sm:w-[50%] md:w-[33.33%] lg:w-[25%] flex-shrink-0 px-2"
               >
                 <Link
-                  href={`/${sanitizeUrl(post.article_category)}/${sanitizeUrl(
+                  href={`/${sanitizeUrl(
                     post.title
                   )}`}
                   title={post.title}

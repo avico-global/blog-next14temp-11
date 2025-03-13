@@ -21,7 +21,7 @@ export default function LatestPost({ blog_list = [], imagePath, about_me }) {
           <div className="space-y-5">
             {allPosts.map((blog, index) => (
               <Link
-                href={`/blog/${sanitizeUrl(blog.title)}`}
+                href={`/${sanitizeUrl(blog.title)}`}
                 key={blog.id || index}
                 title={`Read more about ${blog.title}`}
               >
