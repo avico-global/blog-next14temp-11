@@ -202,7 +202,7 @@ export default function index({
               url: `https://${domain}/${categoryPage}`,
               name: meta?.title?.replaceAll(
                 "##category##",
-                category?.replaceAll("-", " ")
+                categoryPage?.replaceAll("-", " ")
               ),
               description: meta?.description?.replaceAll(
                 "##category##",

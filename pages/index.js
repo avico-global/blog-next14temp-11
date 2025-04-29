@@ -27,6 +27,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+
+
 export default function Home({
   blog_list,
   about_me,
@@ -39,6 +41,13 @@ export default function Home({
   favicon,
   copyright,
 }) {
+ 
+const faviconUrl =favicon
+?`$/images/${imagePath}/${favicon}` 
+  :'/favicon.ico';
+
+  console.log("Favicon THEEK HA ",faviconUrl)
+
   return (
     <div>
       <Head>
@@ -60,19 +69,19 @@ export default function Home({
         <link
           rel="apple-touch-icon"
           sizes="180x180"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={faviconUrl}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="32x32"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={faviconUrl}
         />
         <link
           rel="icon"
           type="image/png"
           sizes="16x16"
-          href={`${process.env.NEXT_PUBLIC_SITE_MANAGER}/images/${imagePath}/${favicon}`}
+          href={faviconUrl}
         />
       </Head>
 
