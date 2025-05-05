@@ -23,6 +23,7 @@ export default function Navbar({
   const [openSearch, setOpenSearch] = useState(false);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const searchRef = useRef(null);
+  const searchResultsRef = useRef(null);
 
   // Add trending blogs state
   const trendingBlogs = blog_list?.slice(2, 6) || [];
@@ -42,11 +43,11 @@ export default function Navbar({
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Check if click is outside the search container AND not on the search input
       if (
         searchRef.current && 
         !searchRef.current.contains(event.target) && 
-        !event.target.closest('input[type="text"]')
+        !event.target.closest('input[type="text"]') &&
+        !searchResultsRef.current?.contains(event.target)
       ) {
         setOpenSearch(false);
         setSearchQuery('');
@@ -62,8 +63,10 @@ export default function Navbar({
 
   const handleSearchToggle = () => {
     setOpenSearch(!openSearch);
-    setSearchQuery('');
-    setFilteredBlogs([]);
+    if (!openSearch) {
+      setSearchQuery('');
+      setFilteredBlogs([]);
+    }
   };
 
   const handleSearchChange = (e) => {
@@ -155,7 +158,7 @@ export default function Navbar({
 
             {searchQuery ? (
               // Search Results
-              <div className="border-t pt-6">
+              <div ref={searchResultsRef} className="border-t pt-6">
                 {filteredBlogs?.length > 0 ? (
                   <div className="space-y-4">
                     {filteredBlogs.map((item, index) => (
@@ -163,6 +166,7 @@ export default function Navbar({
                         key={index}
                         href={`/${sanitizeUrl(item?.title)}`}
                         title={item.title}
+                        className="w-full text-left"
                       >
                         <div className="p-3 hover:bg-gray-100 rounded-md transition-colors">
                           <h3 className="font-medium">{item.title}</h3>
