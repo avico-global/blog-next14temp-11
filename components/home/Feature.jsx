@@ -15,12 +15,14 @@ export default function Feature({ blog_list, imagePath }) {
 
   return (
     <Container className="relative pb-4 px-0 border-t-[2px] mt-16 border-black overflow-hidden">
-      <div className="pt-5 pb-7 text-md font-light flex items-center gap-2">
-        <h3>Feature Post</h3>
-        <ChevronRight className="w-5 h-5" />
-      </div>
-
       {featuredPost && (
+        <div className="pt-5 pb-7 text-md font-light flex items-center gap-2">
+          <h3>Feature Post</h3>
+          <ChevronRight className="w-5 h-5" />
+      </div>
+      )}
+      {featuredPost && (
+
         <div className="relative block overflow-hidden">
           <div className="relative block ">
             <div className="relative h-[80vh] sm:h-[550px] sm:rounded-[4px] overflow-hidden group">
