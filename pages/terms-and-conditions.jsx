@@ -10,7 +10,7 @@ import {
   getDomain,
   getImagePath,
 } from "@/components/lib/myFun";
-
+    
 import Head from "next/head";
 import { Raleway } from "next/font/google";
 import JsonLd from "@/json/JsonLd";
@@ -156,7 +156,6 @@ export async function getServerSideProps({ req }) {
     domain,
     type: "categories",
   });
- 
   const terms = await callBackendApi({ domain, type: "terms" });
   const layout = await callBackendApi({ domain, type: "layout" });
   const about_me = await callBackendApi({
