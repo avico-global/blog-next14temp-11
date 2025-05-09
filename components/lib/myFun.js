@@ -14,7 +14,7 @@ export const getDomain = (host) => {
   // const defaultDomain = "abcUsama1122.usama";
 
   
-  const defaultDomain = "local-carpet-cleaners.sitebuilderz.com";
+  const defaultDomain = "mikes-auto-body.sitebuilderz.com";
   // const defaultDomain = "local-carpet-cleaners.sitebuilderz.com";
   // const defaultDomain = "geyserrepairs.sitebuilderz.com";
   // const defaultDomain = "custom-wheels-car-rims.sitebuilderz.com";

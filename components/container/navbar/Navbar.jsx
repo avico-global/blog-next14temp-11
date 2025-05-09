@@ -9,18 +9,18 @@ import Logo from "./Logo";
 import Image from "next/image";
 import { useRouter } from "next/router";
 
-export default function Navbar({ 
+export default function Navbar({
   staticPages,
   categories,
   logo,
   imagePath,
   blog_list,
-  searchContainerRef
+  searchContainerRef,
 }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [openSearch, setOpenSearch] = useState(false);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const searchRef = useRef(null);
@@ -30,7 +30,8 @@ export default function Navbar({
   // Add trending blogs state
   const trendingBlogs = blog_list?.slice(2, 6) || [];
 
-  const li = "text-black text-lg relative after:absolute after:bottom-0 after:right-0 after:h-[2px] after:w-0 after:bg-black after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full";
+  const li =
+    "text-black text-lg relative after:absolute after:bottom-0 after:right-0 after:h-[2px] after:w-0 after:bg-black after:transition-all after:duration-300 hover:after:left-0 hover:after:w-full";
 
   useEffect(() => {
     const handleScroll = () => {
@@ -42,32 +43,31 @@ export default function Navbar({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
-  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
-        searchRef.current && 
-        !searchRef.current.contains(event.target) && 
+        searchRef.current &&
+        !searchRef.current.contains(event.target) &&
         !event.target.closest('input[type="text"]') &&
         !searchResultsRef.current?.contains(event.target)
       ) {
         setOpenSearch(false);
-        setSearchQuery('');
+        setSearchQuery("");
         setFilteredBlogs([]);
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [ router]);
+  }, [router]);
 
   const handleSearchToggle = () => {
     setOpenSearch(!openSearch);
     if (!openSearch) {
-      setSearchQuery('');
+      setSearchQuery("");
       setFilteredBlogs([]);
     }
   };
@@ -75,15 +75,16 @@ export default function Navbar({
   const handleSearchChange = (e) => {
     const query = e.target.value;
     setSearchQuery(query);
-    
-    if (query.trim() === '') {
+
+    if (query.trim() === "") {
       setFilteredBlogs([]);
       return;
     }
 
-    const filtered = blog_list?.filter((blog) =>
-      blog.title.toLowerCase().includes(query.toLowerCase())
-    ) || [];
+    const filtered =
+      blog_list?.filter((blog) =>
+        blog.title.toLowerCase().includes(query.toLowerCase())
+      ) || [];
     setFilteredBlogs(filtered);
   };
 
@@ -98,13 +99,13 @@ export default function Navbar({
   useEffect(() => {
     const handleRouteChange = () => {
       setOpenSearch(false);
-      setSearchQuery('');
+      setSearchQuery("");
       setFilteredBlogs([]);
     };
 
-    router.events.on('routeChangeComplete', handleRouteChange);
+    router.events.on("routeChangeComplete", handleRouteChange);
     return () => {
-      router.events.off('routeChangeComplete', handleRouteChange);
+      router.events.off("routeChangeComplete", handleRouteChange);
     };
   }, [router]);
 
@@ -118,23 +119,26 @@ export default function Navbar({
         <Container className="py-4">
           <div className="flex justify-between items-center">
             <div>
-              <button 
+              <button
                 onClick={() => setIsSidebarOpen(true)}
-                className="hover:bg-gray-100 p-2 rounded-full transition-colors lg:hidden"
+                className="hover:bg-gray-100 p-2 rounded-full transition-colors lg:hidden "
               >
                 <MenuIcon />
               </button>
-                
+              <div className="hidden lg:block">
                 <Logo logo={logo} imagePath={imagePath} />
-
+              </div>
+            </div>
+            <div className="hidden md:block lg:hidden ">
+              <Logo logo={logo} imagePath={imagePath} />
             </div>
 
             {/* Desktop Navigation */}
-            <div className="gap-6 items-center hidden lg:flex">
+            <div className="gap-6 items-center hidden lg:flex ">
               {staticPages?.map((item, index) => (
-                <Link 
-                  href={item.href} 
-                  className={li} 
+                <Link
+                  href={item.href}
+                  className={li}
                   key={index}
                   title={item.page}
                 >
@@ -143,9 +147,9 @@ export default function Navbar({
               ))}
               <div className="flex items-center capitalize gap-4">
                 {categories?.map((item, index) => (
-                  <Link 
-                    href={`/category/${sanitizeUrl(item.title)}`} 
-                    className={li} 
+                  <Link
+                    href={`/category/${sanitizeUrl(item.title)}`}
+                    className={li}
                     key={index}
                     title={item.title}
                   >
@@ -156,12 +160,15 @@ export default function Navbar({
             </div>
 
             {/* Search Section */}
-            <div className="flex items-center justify-end gap-3 text-gray-500 relative" ref={searchRef}>
-              <Search 
-                className="cursor-pointer"
-                onClick={handleSearchToggle}
-              />
+            <div
+              className="flex items-center justify-end gap-3 text-gray-500 relative "
+              ref={searchRef}
+            >
+              <Search className="cursor-pointer" onClick={handleSearchToggle} />
             </div>
+          </div>
+          <div className=" md:hidden">
+            <Logo logo={logo} imagePath={imagePath} />
           </div>
         </Container>
       </Fullcontainer>
@@ -170,7 +177,9 @@ export default function Navbar({
       {openSearch && (
         <div className="fixed top-[72px] left-0 w-full bg-white shadow-lg z-40">
           <Container className="py-8">
-            <h2 className="text-2xl font-bold mb-6">What are You Looking For?</h2>
+            <h2 className="text-2xl font-bold mb-6">
+              What are You Looking For?
+            </h2>
             <input
               type="text"
               value={searchQuery}
@@ -195,7 +204,9 @@ export default function Navbar({
                       >
                         <div className="p-3 hover:bg-gray-100 rounded-md transition-colors">
                           <h3 className="font-medium">{item.title}</h3>
-                          <p className="text-sm text-gray-600 mt-1">{item.tagline}</p>
+                          <p className="text-sm text-gray-600 mt-1">
+                            {item.tagline}
+                          </p>
                         </div>
                       </Link>
                     ))}
@@ -220,7 +231,11 @@ export default function Navbar({
                     >
                       <div className="relative aspect-[16/9] mb-3 rounded-lg overflow-hidden">
                         <Image
-                          src={blog.image ? `${imagePath}/${blog.image}` : "/no-image.png"}
+                          src={
+                            blog.image
+                              ? `${imagePath}/${blog.image}`
+                              : "/no-image.png"
+                          }
                           alt={blog.title}
                           fill
                           className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -242,8 +257,8 @@ export default function Navbar({
         </div>
       )}
 
-      <MobileSidebar 
-        isOpen={isSidebarOpen} 
+      <MobileSidebar
+        isOpen={isSidebarOpen}
         onClose={() => setIsSidebarOpen(false)}
         staticPages={staticPages}
         categories={categories}
