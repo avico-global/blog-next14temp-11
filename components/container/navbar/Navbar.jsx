@@ -7,6 +7,7 @@ import MobileSidebar from "../navbar/MobileSidebar";
 import { sanitizeUrl } from "@/components/lib/myFun";
 import Logo from "./Logo";
 import Image from "next/image";
+import { useRouter } from "next/router";
 
 export default function Navbar({ 
   staticPages,
@@ -24,6 +25,7 @@ export default function Navbar({
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const searchRef = useRef(null);
   const searchResultsRef = useRef(null);
+  const router = useRouter();
 
   // Add trending blogs state
   const trendingBlogs = blog_list?.slice(2, 6) || [];
@@ -40,6 +42,7 @@ export default function Navbar({
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+  
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -59,7 +62,7 @@ export default function Navbar({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [ router]);
 
   const handleSearchToggle = () => {
     setOpenSearch(!openSearch);
@@ -83,6 +86,27 @@ export default function Navbar({
     ) || [];
     setFilteredBlogs(filtered);
   };
+
+  const handleLinkClick = () => {
+    // Remove the immediate closing of search
+    // setOpenSearch(false);
+    // setSearchQuery('');
+    // setFilteredBlogs([]);
+  };
+
+  // Add router event listener to close search after navigation
+  useEffect(() => {
+    const handleRouteChange = () => {
+      setOpenSearch(false);
+      setSearchQuery('');
+      setFilteredBlogs([]);
+    };
+
+    router.events.on('routeChangeComplete', handleRouteChange);
+    return () => {
+      router.events.off('routeChangeComplete', handleRouteChange);
+    };
+  }, [router]);
 
   return (
     <>
@@ -167,6 +191,7 @@ export default function Navbar({
                         href={`/${sanitizeUrl(item?.title)}`}
                         title={item.title}
                         className="w-full text-left"
+                        onClick={handleLinkClick}
                       >
                         <div className="p-3 hover:bg-gray-100 rounded-md transition-colors">
                           <h3 className="font-medium">{item.title}</h3>
@@ -191,6 +216,7 @@ export default function Navbar({
                       key={index}
                       href={`/${sanitizeUrl(blog.title)}`}
                       className="group"
+                      onClick={handleLinkClick}
                     >
                       <div className="relative aspect-[16/9] mb-3 rounded-lg overflow-hidden">
                         <Image
