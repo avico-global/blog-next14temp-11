@@ -43,7 +43,7 @@ export default function MobileSidebar({ isOpen, onClose, staticPages, categories
               {categories?.map((item, index) => (
                 <li key={`category-${index}`}>
                   <Link 
-                    href={`/${sanitizeUrl(item.title)}`}
+                    href={`/category/${sanitizeUrl(item.title)}`}
                     className="block py-2 text-lg hover:text-gray-600 transition-colors"
                     onClick={onClose}
                     title={item.title}
